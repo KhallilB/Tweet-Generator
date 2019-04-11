@@ -24,6 +24,7 @@ def histogram_lists(source):
     text.sort()
     while len(text) > 0:
         count = 0
+
         match = True
         index = len(text) - 1
         word = text[index]
@@ -81,12 +82,13 @@ def frequency(word, histogram):
 if __name__ == '__main__':
     file = open('gutenberg.txt', 'r')
     source = file.read()
-    pattern = ['[^!.?]+']
+    pattern = ['[^!.?-]+']
     punc_translation = (" ".join(remove_punctuation(pattern, source)))
     # histogram
     text_histogram = histogram_lists(source=punc_translation)
     text_unique_words = unique_words(histogram=text_histogram)
-    his_word_frequency = frequency(word="his", histogram=text_histogram)
+    his_word_frequency = frequency(word='crude', histogram=text_histogram)
 
-    print('\'his\' appears {} times. Also we found {} unique words.'.format(
+    print('\'crude\' appears {} times. Also we found {} unique words.'.format(
         his_word_frequency, text_unique_words))
+    # print(text_histogram)
