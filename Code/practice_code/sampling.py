@@ -31,11 +31,14 @@ def test_probability(histogram):
     for i in range(10000):
         words += ' ' + weighted_random_word(histogram=histogram)
     test_histogram = histograms.histogram_lists(words)
-    for k in range(25):
-        index = len(test_histogram) - 1 - k
-        printwords = test_histogram[index][0][1]
-        printwords = str(test_histogram[index][0])
-        print(printwords)
+    sample_amount = 20
+    index = len(test_histogram) - 1
+    while sample_amount > 0 and index > 0:
+        print_text = test_histogram[index][0][1]
+        print_text += str(test_histogram[index][0])
+        print(print_text)
+        index -= 1
+        sample_amount -= 1
 
 
 if __name__ == '__main__':

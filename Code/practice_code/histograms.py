@@ -62,6 +62,29 @@ def histogram_tuples(source):
     return histogram_tuple
 
 
+def histogram_counts(source):
+    histogram_count = {}
+    text = source.split()
+    text.sort()
+    while len(text) > 0:
+        count = 0
+        match = True
+        index = len(text) - 1
+        word = text[index]
+        while match and index >= 0:
+            if word == text[index]:
+                count += 1
+                index -= 1
+            else:
+                match = False
+        if count in histogram_count:
+            histogram_count[count].append(word)
+        else:
+            histogram_count[count] = [word]
+        del text[-(count):]
+    return histogram_count
+
+
 def remove_punctuation(pattern, source):
     for pat in pattern:
         return(re.findall(pat, source))
@@ -85,10 +108,10 @@ if __name__ == '__main__':
     pattern = ['[^!.?-]+']
     punc_translation = (" ".join(remove_punctuation(pattern, source)))
     # histogram
-    text_histogram = histogram_lists(source=punc_translation)
+    text_histogram = histogram_counts(source=punc_translation)
     text_unique_words = unique_words(histogram=text_histogram)
     his_word_frequency = frequency(word='crude', histogram=text_histogram)
 
     print('\'crude\' appears {} times. Also we found {} unique words.'.format(
         his_word_frequency, text_unique_words))
-    # print(text_histogram)
+    print(text_histogram)
