@@ -112,6 +112,5 @@ if __name__ == '__main__':
     text_unique_words = unique_words(histogram=text_histogram)
     his_word_frequency = frequency(word='crude', histogram=text_histogram)
 
-    print('\'crude\' appears {} times. Also we found {} unique words.'.format(
-        his_word_frequency, text_unique_words))
+    print('We found {} unique words.'.format(text_unique_words))
     print(text_histogram)
