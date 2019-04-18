@@ -55,4 +55,4 @@ if __name__ == '__main__':
     word = weighted_random_word(histogram=source_histogram)
     print(word)
     print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-    # test_probability(source_histogram)
+    test_probability(source_histogram)

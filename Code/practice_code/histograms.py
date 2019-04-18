@@ -84,6 +84,8 @@ def histogram_counts(source):
         del text[-(count):]
     return histogram_count
 
+# TODO: Create another function that removes punctuations
+
 
 def remove_punctuation(pattern, source):
     for pat in pattern:
@@ -93,6 +95,8 @@ def remove_punctuation(pattern, source):
 def unique_words(histogram):
     unique_entries = len(list(histogram))
     return unique_entries
+
+# Make function that takes in the exception of dictionaries and tuples
 
 
 def frequency(word, histogram):
@@ -110,7 +114,7 @@ if __name__ == '__main__':
     # histogram
     text_histogram = histogram_counts(source=punc_translation)
     text_unique_words = unique_words(histogram=text_histogram)
-    his_word_frequency = frequency(word='crude', histogram=text_histogram)
+    # his_word_frequency = frequency(word='crude', histogram=text_histogram)
 
     print('We found {} unique words.'.format(text_unique_words))
     print(text_histogram)
