@@ -4,8 +4,8 @@ import random
 
 def weighted_word(histogram):
     random_word = ''
-    weights = sum(histogram.values())
-    random_weight = random.randrange(weights)
+    total_of_weights = sum(histogram.values())
+    random_weight = random.randrange(total_of_weights)
 
     for key, value in histogram.items():
         if random_weight - value < 0:
@@ -18,27 +18,28 @@ def weighted_word(histogram):
 
 
 def markov_chain(tokens):
-    markov_chain = {}
+    markov_links = {}
     previous_word = None
     for token in tokens:
-        if token not in markov_chain:
-            markov_chain[token] = dictogram.Dictogram()
+        if token not in markov_links:
+            markov_links[token] = dictogram.Dictogram()
         if previous_word is not None:
-            markov_chain[previous_word].add_count(token)
+            markov_links[previous_word].add_count(token)
         previous_word = token
-    return markov_chain
+    return markov_links
 
 
 def markov_jump(link, length):
-    sentance = ''
+    sentence = ''
     current_word = None
     for _ in range(length):
         if current_word is None or len(link[current_word]) == 0:
             current_word = random.choice(list(link.keys()))
-            sentance += ' ' + current_word
+            sentence += ' ' + current_word
         else:
-            possiblities = link[current_word]
-            next_word = word(possiblities)
-            sentance += ' ' + next_word
+            set_of_possibities = link[current_word]
+            next_word = weighted_word(set_of_possibities)
+            sentence += ' ' + next_word
             current_word = next_word
-        return sentance
+
+    return sentence
