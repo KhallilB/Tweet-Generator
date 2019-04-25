@@ -17,5 +17,5 @@ chain = sentance_sampling.markov_chain(tokens=tokens)
 
 @app.route('/')
 def index():
-    sentance = sentance_sampling.markov_jump(link=chain, length=25)
+    sentance = sentance_sampling.markov_jump(link=chain, length=45)
     return sentance

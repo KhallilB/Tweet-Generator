@@ -19,6 +19,7 @@ class LinkedList(object):
         """Initialize this linked list and append the given items, if any."""
         self.head = None  # First node
         self.tail = None  # Last node
+        self.list_length = 0  # Length of the linnked list
         # Append given items
         if items is not None:
             for item in items:
@@ -55,35 +56,73 @@ class LinkedList(object):
     def length(self):
         """Return the length of this linked list by traversing its nodes.
         TODO: Running time: O(???) Why and under what conditions?"""
-        # TODO: Loop through all nodes and count one for each
+        return self.list_length
 
     def append(self, item):
         """Insert the given item at the tail of this linked list.
         TODO: Running time: O(???) Why and under what conditions?"""
-        # TODO: Create new node to hold given item
-        # TODO: Append node after tail, if it exists
+        node = Node(item)
+
+        if self.head is not None:
+            self.tail.next = node
+            self.tail = node
+        else:
+            self.head = node
+            self.tail = node
+        self.list_length += 1
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
         TODO: Running time: O(???) Why and under what conditions?"""
-        # TODO: Create new node to hold given item
-        # TODO: Prepend node before head, if it exists
+        node = Node(item)
+
+        if self.head is not None:
+            node.next = self.head
+            self.head = node
+        else:
+            self.head = node
+            self.tail = node
+        self.list_length += 1
 
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality.
         TODO: Best case running time: O(???) Why and under what conditions?
         TODO: Worst case running time: O(???) Why and under what conditions?"""
-        # TODO: Loop through all nodes to find item where quality(item) is True
-        # TODO: Check if node's data satisfies given quality function
+        matches = None
+        node = self.head
+
+        while node is not None:
+            if quality(node.data) is True:
+                matches = node.data
+                node = None
+            else:
+                node = node.next
+        return matches
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
         TODO: Best case running time: O(???) Why and under what conditions?
         TODO: Worst case running time: O(???) Why and under what conditions?"""
-        # TODO: Loop through all nodes to find one whose data matches given item
-        # TODO: Update previous node to skip around node with matching data
-        # TODO: Otherwise raise error to tell user that delete has failed
-        # Hint: raise ValueError('Item not found: {}'.format(item))
+        previous = None
+        found = False
+        node = self.head
+
+        while node is not None:
+            if node.data == item:
+                if previous is not None:
+                    previous.next = node.next
+                else:
+                    self.head = node.next
+                if node.next is None:
+                    self.tail = previous
+                self.list_length -= 1
+                node = None
+                found = True
+            previous = node
+            if node is not None:
+                node = node.next
+        if not found:
+            raise ValueError('Item not found: {}'.format(item))
 
 
 def test_linked_list():
