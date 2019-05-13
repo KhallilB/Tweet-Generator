@@ -8,6 +8,7 @@ class HashTable(object):
     def __init__(self, init_size=8):
         """Initialize this hash table with the given initial size."""
         # Create a new list (used as fixed-size array) of empty linked lists
+        entries = 0
         self.buckets = [LinkedList() for _ in range(init_size)]
 
     def __str__(self):
@@ -24,13 +25,38 @@ class HashTable(object):
         # Calculate the given key's hash code and transform into bucket index
         return hash(key) % len(self.buckets)
 
+    def __getitem__(self, key):
+        # Get an item with subscripting syntax
+        return self.get(key)
+
+    def __setitem__(self, key, value):
+        # Set item with syntax
+        self.set(key, value)
+
+    def __contains__(self, key):
+        # Check if item is contained
+        return self.contains(key)
+
+    def __len__(self):
+        # Check length
+        return self.number_of_entries
+
+    def __iterable__(self):
+        # Use as iterable object
+        return self.generate()
+
+    # Python generator returns an object we can iterate over
+    def generate(self):
+        for bucket in self.buckets:
+            for entry in bucket:
+                yield entry
+
     def keys(self):
         """
         Return a list of all keys in this hash table.
 
         Running time: 0(n). Where (n) is the amount of buckets in the hashtable
-        You have to loop through each and evey bucket in the 
-        hashtable.
+        Were always traversing every node in the linked list.
         """
         # Store all keys in an array
         all_keys = []
@@ -48,8 +74,7 @@ class HashTable(object):
         Return a list of all values in this hash table.
 
         Running time: O(n) Where (n) is the amount of buckets in the hastable.
-        You have to loop through each and evey bucket in the 
-        hashtable.
+        Were always traversing every node in the linked list.
         """
        # Store all values in an array
         all_values = []
@@ -67,8 +92,7 @@ class HashTable(object):
         Return a list of all items (key-value pairs) in this hash table.
 
         Running time: O(n) Where (n) is the amount of buckets in the hastable.
-        You have to loop through all of the buckets in the hastable and return all
-        the items in each bucket.
+        Were always traversing every node in the linked list 
         """
         # Store all items in an array 
         all_items = []
@@ -83,28 +107,19 @@ class HashTable(object):
         """
         Return the number of key-value entries by traversing its buckets.
 
-        Running time: O(n) Where (n) is the amount of buckets in the hashtable.
-        You have to loop through all of the buckets and count for every key-value
-        in each bucket.
+        Running time: O(1) Returning a stored variable.
         """
-        # Counter for total items
-        total_items = 0
-        # Loop through all the buckets
-        for bucket in self.buckets:
-            # Set counter to what the bucket returns from its length function
-            total_items += bucket.length()
-        # Return the counter for total items
-        return total_items
+        return self.entries
 
     def contains(self, key):
         """
         Return True if this hash table contains the given key, or False.
 
         Running time:
-        Best Case: 0(1): If the hashtabe only contains one entry
+        Best Case: 0(1): If the hashtabe only contains one entry or is empty
         ----------------------------------------------------------------------------
         Worst Case: 0(n): Where (n) is the amount of buckets in the hashtable
-        You have to loop through every bucket in the hashtable.
+        You have to traverse the entire linked list to see if the linked list contains the value
         """
         index = self._bucket_index(key)
         found = False
@@ -124,7 +139,7 @@ class HashTable(object):
         Best Case: 0(1): If ithe value is assocaited with the first key in the first bucket
         ----------------------------------------------------------------------------
         Worst Case: 0(n): Where (n) the amount of buckets in the hashtable.
-        You have to loop through all of the buckets to find value assocaiated with the key
+        You have to traverse the entire linked list to find the iteem that you want
         """
         index = self._bucket_index(key)
         bucket = self.buckets[index]
@@ -146,7 +161,7 @@ class HashTable(object):
         Best Case: O(1) The key value we are updating is the first item in the first bucket.
         ----------------------------------------------------------------------------
         Worst Case: 0(n) The key value pair being updated is not the fist item in list of buckets.
-        Requiring you to loop over all of list of buckets and update the key with its associated value
+        You have to traverse the entire linked list to find the node you want to set
         """
         index = self._bucket_index(key)
         bucket = self.buckets[index]
@@ -159,6 +174,7 @@ class HashTable(object):
 
         # Otherwise, insert given key-value entry into bucket
         bucket.append((key, value))
+        self.entries += 1
 
     def delete(self, key):
         """
@@ -168,8 +184,7 @@ class HashTable(object):
         Best Case: O(1): The key-value being deleted is the first item in the first bucket.
         ----------------------------------------------------------------------------
         Worst Case: 0(n): Th key-value being deleted is not the first item in the list of buckets
-        You have to loop over all of the bukets to find the key-value pair that needs to
-        be deleted
+        You have to traverse the entire linked list to find the node you want to delete
         """
         index = self._bucket_index(key)
         bucket = self.buckets[index]
@@ -179,7 +194,8 @@ class HashTable(object):
         if key_value is not None:
             # If found, delete entry associated with given key
             bucket.delete(key_value)
-        # TOtherwise, raise error to tell user delete failed
+            self.entries -= 1
+        # Otherwise, raise error to tell user delete failed
         else:
             raise KeyError('Key not found: {}'.format(key))
 
