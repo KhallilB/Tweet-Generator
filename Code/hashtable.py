@@ -8,7 +8,7 @@ class HashTable(object):
     def __init__(self, init_size=8):
         """Initialize this hash table with the given initial size."""
         # Create a new list (used as fixed-size array) of empty linked lists
-        entries = 0
+        self.entries = 0
         self.buckets = [LinkedList() for _ in range(init_size)]
 
     def __str__(self):
@@ -39,7 +39,7 @@ class HashTable(object):
 
     def __len__(self):
         # Check length
-        return self.number_of_entries
+        return self.entries
 
     def __iterable__(self):
         # Use as iterable object
@@ -55,8 +55,9 @@ class HashTable(object):
         """
         Return a list of all keys in this hash table.
 
-        Running time: 0(n). Where (n) is the amount of buckets in the hashtable
-        Were always traversing every node in the linked list.
+        Running time: 0(l). Where (l) (n/b) The number of entries we have divided by the amount of buckets.
+        Were always traversing every node in the linked list in each bucket in the hashtable and storing the 
+        keys in an array.
         """
         # Store all keys in an array
         all_keys = []
@@ -73,8 +74,9 @@ class HashTable(object):
         """
         Return a list of all values in this hash table.
 
-        Running time: O(n) Where (n) is the amount of buckets in the hastable.
-        Were always traversing every node in the linked list.
+        Running time: 0(l). Where (l) (n/b) The number of entries we have divided by the amount of buckets.
+        Were always traversing every node in the linked list in each bucket in the hashtable and storing the
+        values in an array.
         """
        # Store all values in an array
         all_values = []
@@ -91,8 +93,9 @@ class HashTable(object):
         """
         Return a list of all items (key-value pairs) in this hash table.
 
-        Running time: O(n) Where (n) is the amount of buckets in the hastable.
-        Were always traversing every node in the linked list 
+        Running time: 0(l). Where (l) (n/b) The number of entries we have divided by the amount of buckets.
+        Were always traversing every node in the linked list in each bucket in the hashtable and storing the 
+        key-value in an array.
         """
         # Store all items in an array 
         all_items = []
@@ -111,6 +114,7 @@ class HashTable(object):
         """
         return self.entries
 
+
     def contains(self, key):
         """
         Return True if this hash table contains the given key, or False.
@@ -118,13 +122,13 @@ class HashTable(object):
         Running time:
         Best Case: 0(1): If the hashtabe only contains one entry or is empty
         ----------------------------------------------------------------------------
-        Worst Case: 0(n): Where (n) is the amount of buckets in the hashtable
-        You have to traverse the entire linked list to see if the linked list contains the value
+        Worst Case: 0(l). Where (l) (n/b) The number of entries we have divided by the amount of buckets.
+        You have to traverse the entire hashtable to see if the linked list contains the value were searching for.
         """
         index = self._bucket_index(key)
         found = False
         # Find bucket where given key belongs
-        key_value = self.buckets[index].find(lambda item: item[0] == key)
+        key_value = self.buckets[index].find(lambda item: item[0] == key) # 0(l)
         # Check if key-value entry exists in bucket
         if key_value is not None:
             found = True
@@ -138,13 +142,13 @@ class HashTable(object):
         Running time:
         Best Case: 0(1): If ithe value is assocaited with the first key in the first bucket
         ----------------------------------------------------------------------------
-        Worst Case: 0(n): Where (n) the amount of buckets in the hashtable.
-        You have to traverse the entire linked list to find the iteem that you want
+        Worst Case: 0(l). Where (l) (n/b) The number of entries we have divided by the amount of buckets.
+        You have to traverse the entire hashtable to find the item that you want
         """
         index = self._bucket_index(key)
         bucket = self.buckets[index]
         # Find bucket where given key belongs
-        found_item = bucket.find(lambda item: item[0] == key)
+        found_item = bucket.find(lambda item: item[0] == key) # 0(l)
         # Check if key-value entry exists in bucket
         if found_item is not None:
             # If found, return value associated with given key
@@ -160,22 +164,21 @@ class HashTable(object):
         Running time: 
         Best Case: O(1) The key value we are updating is the first item in the first bucket.
         ----------------------------------------------------------------------------
-        Worst Case: 0(n) The key value pair being updated is not the fist item in list of buckets.
-        You have to traverse the entire linked list to find the node you want to set
+        Worst Case: 0(l). Where (l) (n/b) The number of entries we have divided by the amount of buckets.
+        You have to traverse the hashtable to find the node you want to set
         """
         index = self._bucket_index(key)
         bucket = self.buckets[index]
         # Find bucket where given key belongs
-        found_item = bucket.find(lambda item: item[0] == key)
+        found_item = bucket.find(lambda item: item[0] == key)  # 0(l)
         # Check if key-value entry exists in bucket
         if found_item is not None:
             # If found, update value associated with given key
-            bucket.delete(found_item)
-
+            bucket.delete(found_item) # 0(l)
+            self.entries -= 1
         # Otherwise, insert given key-value entry into bucket
         bucket.append((key, value))
         self.entries += 1
-
     def delete(self, key):
         """
         Delete the given key from this hash table, or raise KeyError.
@@ -183,13 +186,13 @@ class HashTable(object):
         Running time: 
         Best Case: O(1): The key-value being deleted is the first item in the first bucket.
         ----------------------------------------------------------------------------
-        Worst Case: 0(n): Th key-value being deleted is not the first item in the list of buckets
-        You have to traverse the entire linked list to find the node you want to delete
+        Worst Case: 0(l). Where (l) (n/b) The number of entries we have divided by the amount of buckets.
+        You have to traverse the entire hashtable to find the node you want to delete
         """
         index = self._bucket_index(key)
         bucket = self.buckets[index]
         # Find bucket where given key belongs
-        key_value = bucket.find(lambda item: item[0] == key)
+        key_value = bucket.find(lambda item: item[0] == key) # 0(l)
         # Check if key-value entry exists in bucket
         if key_value is not None:
             # If found, delete entry associated with given key
@@ -219,7 +222,7 @@ def test_hash_table():
     print('length: {}'.format(ht.length()))
 
     # Enable this after implementing delete method
-    delete_implemented = False
+    delete_implemented = True 
     if delete_implemented:
         print('\nTesting delete:')
         for key in ['I', 'V', 'X']:
