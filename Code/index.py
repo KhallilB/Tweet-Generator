@@ -3,7 +3,7 @@ import get_tokens
 import cleanup
 import sentance_sampling
 
-from flask import Flask 
+from flask import Flask, render_template
 from flask import request
 app = Flask(__name__)
 
@@ -20,11 +20,12 @@ order = 2
 source_map = sentance_sampling.markov_path(token_list=tokens, order=order)
 
 @app.route('/')
-def index():
-    number_of_words = 30 if request.args.get('num') is None else int(request.args.get('num'))
+def home():
+    number_of_words = 150
     sentence = sentance_sampling.markov_walk(path=source_map, distance=number_of_words, start_stop_tokens=start_stop_tokens)
-    return sentence
+    return render_template('index.html', sentence=sentence)
 
+   
 if __name__ == '__main__':
     print(source_map['\u03a9'])
     sentence = sentance_sampling.markov_walk(path=source_map, distance=50, start_stop_tokens=start_stop_tokens)

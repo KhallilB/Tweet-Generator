@@ -22,14 +22,14 @@ def markov_path(token_list, order):
     for n in range(order):
         starting_items.append(token_list[n])
 
-    state_tracker = queue.Queue(size=order, items=starting_items)
-    state = tuple(state_tracker.items())
+    tracker = queue.Queue(size=order, items=starting_items)
+    state = tuple(tracker.items())
     markov_map[state] = dictogram.Dictogram()
 
     for index in range(order, len(token_list)):
         new_token = token_list[index]
-        state_tracker.enqueue(new_token)
-        new_state = tuple(state_tracker.items())
+        tracker.enqueue(new_token)
+        new_state = tuple(tracker.items())
         if new_state not in markov_map:
             markov_map[new_state] = dictogram.Dictogram()
         markov_map[state].add_count(new_state)
